@@ -2,6 +2,7 @@
 node_modules/
 unpackage/
 dist/
+.yalc/
 
 # local env files
 .env.local
@@ -16,6 +17,7 @@ yarn-error.log*
 .project
 .idea
 .vscode
+.hbuilderx
 *.suo
 *.ntvs*
 *.njsproj
