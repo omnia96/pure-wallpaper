@@ -1,26 +1,42 @@
 <template>
   <view class="page">
-    <search-bar @to-account="settingSheetState = true"></search-bar>
+    <!-- #ifdef MP-WEIXIN -->
+<!--    <u-navbar ></u-navbar>-->
+<!--    <search-bar @to-account="settingSheetState = true"></search-bar>-->
+    <view class="header">
+      <view class="headline-6">
+        Today
+      </view>
+      <u-avatar bgColor="#eeeeee"
+                icon="account"
+                font-size="60rpx" @click="settingSheetState = true"
+      ></u-avatar>
+    </view>
     <waterfall class="w-100" margin="0" :value="list">
-      <template  v-slot:default="{ value }">
-        <view class="image-card">
-          <u-image  :src="value" width="50vw" mode="widthFix"></u-image>
+      <template v-slot:default="{ value }">
+        <view class="image-card" @click="toDetail(value)">
+          <u-image :src="value.url" width="50vw" mode="widthFix"></u-image>
         </view>
       </template>
     </waterfall>
     <bottom-sheet title="设置" :show="settingSheetState" @close="settingSheetState = false">
       <cell-group>
         <cell title="授权管理" @click="openSetting"></cell>
-        <cell title="更新日志" @click="toLogs"></cell>
+<!--        <cell title="更新日志" @click="toLogs"></cell>-->
         <!-- #ifdef MP-WEIXIN -->
         <u-button :plain="false" open-type="contact" :customStyle="buttonNormalStyle">
           <cell title="在线联系"></cell>
         </u-button>
         <!-- #endif -->
-        <cell title="隐私权政策" :is-last="true" @click="toPrivacyPolicy"></cell>
+<!--        <cell title="隐私权政策" :is-last="true" @click="toPrivacyPolicy"></cell>-->
       </cell-group>
     </bottom-sheet>
-    <tabbar></tabbar>
+    <update-manager></update-manager>
+    <!-- #endif -->
+    <!-- #ifdef H5 -->
+    <wallpapers></wallpapers>
+    <!-- #endif -->
+<!--    <tabbar></tabbar>-->
   </view>
 </template>
 
@@ -32,8 +48,14 @@ import Cell from 'pure-ui/components/cell.vue';
 import Tabbar from 'pure-ui/components/tabbar.vue';
 import Waterfall from 'pure-ui/components/waterfall.vue';
 import BottomSheet from 'pure-ui/components/bottom-sheet.vue';
+import UpdateManager from 'pure-ui/components/update-manager.vue';
+import Wallpapers from '@/views/wallpapers.vue';
+import RxUniCloud from '@/core/unit/rx-uni-cloud';
+import {finalize, map} from 'rxjs';
 @Component({
-  components: {Cell, SearchBar, CellGroup, Tabbar, Waterfall, BottomSheet},
+  components: {
+    Wallpapers, Cell, SearchBar, CellGroup, Tabbar, Waterfall, BottomSheet, UpdateManager,
+  },
 })
 export default class Index extends Vue {
   settingSheetState = false;
@@ -49,17 +71,12 @@ export default class Index extends Vue {
   };
   list = [];
   created() {
-    uniCloud.callFunction({
-      name: 'images',
-      data: {name: 1},
-      success: (result) => {
-        console.log(result);
-        this.list = result.result;
-      },
-    });
+    uni.getUpdateManager();
+    RxUniCloud.callFunction('images').pipe(
+        map((result) => this.list = result.result.data),
+    ).subscribe();
   }
   toPrivacyPolicy() {
-    console.log(1111);
     uni.navigateTo({
       url: '/pages/privacy-policy/privacy-policy',
       fail: (result) => console.log(result),
@@ -74,11 +91,28 @@ export default class Index extends Vue {
     uni.openSetting({});
   }
   onShareAppMessage() {}
+  onPullDownRefresh() {
+    RxUniCloud.callFunction('images').pipe(
+        map((result) => this.list = result.result.data),
+        finalize(() => uni.stopPullDownRefresh()),
+    ).subscribe();
+  }
+  toDetail(item: {name: string, url: string}) {
+    uni.navigateTo({
+      url: '/pages/detail/detail?url=' + item.url,
+    });
+  }
 }
 </script>
 
 <style lang="scss">
 .image-card {
   width: 100%;
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20+rpx;
 }
 </style>
