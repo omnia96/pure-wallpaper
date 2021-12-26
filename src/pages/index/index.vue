@@ -1,6 +1,6 @@
 <template>
   <view class="page">
-    <!-- #ifdef MP-WEIXIN -->
+    <!-- #ifdef MP-WEIXIN|MP-QQ -->
 <!--    <u-navbar ></u-navbar>-->
 <!--    <search-bar @to-account="settingSheetState = true"></search-bar>-->
     <view class="header">
@@ -12,7 +12,7 @@
                 font-size="60rpx" @click="settingSheetState = true"
       ></u-avatar>
     </view>
-    <waterfall class="w-100" margin="0" :value="list">
+    <waterfall class="w-100" :margin="0" :value="list">
       <template v-slot:default="{ value }">
         <view class="image-card" @click="toDetail(value)">
           <u-image :src="value.url" width="50vw" mode="widthFix"></u-image>
@@ -28,7 +28,7 @@
           <cell title="在线联系"></cell>
         </u-button>
         <!-- #endif -->
-<!--        <cell title="隐私权政策" :is-last="true" @click="toPrivacyPolicy"></cell>-->
+        <cell title="隐私权政策" :is-last="true" @click="toPrivacyPolicy"></cell>
       </cell-group>
     </bottom-sheet>
     <update-manager></update-manager>

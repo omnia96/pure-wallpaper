@@ -41,9 +41,11 @@
     "test:h5": "cross-env UNI_PLATFORM=h5 jest -i",
     "test:ios": "cross-env UNI_PLATFORM=app-plus UNI_OS_NAME=ios jest -i",
     "test:mp-baidu": "cross-env UNI_PLATFORM=mp-baidu jest -i",
-    "test:mp-weixin": "cross-env UNI_PLATFORM=mp-weixin jest -i"
+    "test:mp-weixin": "cross-env UNI_PLATFORM=mp-weixin jest -i",
+    "publish:mp-qq": "sh ci/mp-qq/publish.sh"
   },
   "dependencies": {
+    "@city-hunter/pure-ui": "file:.yalc/@city-hunter/pure-ui",
     "@dcloudio/uni-app-plus": "^2.0.1-32920211122003",
     "@dcloudio/uni-h5": "^2.0.1-32920211122003",
     "@dcloudio/uni-helper-json": "*",

@@ -4,6 +4,10 @@
     "pure-ui": {
       "signature": "3570b1e99c07b71cc3c1f9c3fc95e638",
       "file": true
+    },
+    "@city-hunter/pure-ui": {
+      "signature": "25f8c6bae3e1fc84e70fab1e1f8406dc",
+      "file": true
     }
   }
 }

@@ -10,7 +10,8 @@
 				"enablePullDownRefresh": true
 			}
 		},
-		{"path": "pages/detail/detail", "style": {"navigationStyle":"custom"}}
+		{"path": "pages/detail/detail", "style": {"navigationStyle":"custom"}},
+		{"path": "pages/privacy-policy/privacy-policy", "style":  {"navigationBarTitleText": "隐私权政策"}}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
