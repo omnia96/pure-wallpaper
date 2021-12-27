@@ -11,7 +11,8 @@
 			}
 		},
 		{"path": "pages/detail/detail", "style": {"navigationStyle":"custom"}},
-		{"path": "pages/privacy-policy/privacy-policy", "style":  {"navigationBarTitleText": "隐私权政策"}}
+		{"path": "pages/privacy-policy/privacy-policy", "style":  {"navigationBarTitleText": "隐私权政策"}},
+		{"path": "pages/log/log"}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
@@ -22,7 +23,8 @@
 	"condition": {
 		"current": -1,
 		"list": [
-			{"name": "详情", "path":  "pages/detail/detail", "query": "url=https://www.xxoozm.com/wp-content/uploads/2021/05/2021051810332617.jpg"}
+			{"name": "详情", "path":  "pages/detail/detail", "query": "url=https://www.xxoozm.com/wp-content/uploads/2021/05/2021051810332617.jpg"},
+			{"name": "日志", "path":  "pages/log/log"}
 		]
 	}
 }

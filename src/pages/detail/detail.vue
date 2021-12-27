@@ -1,8 +1,10 @@
 <template>
   <view class="page">
     <u-navbar :fixed="true" bgColor="transparent">
-      <view class="u-nav-slot" slot="left">
-        <u-icon name="arrow-left" size="19" @click="back"></u-icon>
+      <view class="u-nav-slot" slot="left" @click="back">
+        <u-icon :name="isBack ? 'arrow-left' : 'home'"
+                size="40rpx" color="black" :bold="true"
+        ></u-icon>
       </view>
     </u-navbar>
     <view class="detail flex-c">
@@ -23,12 +25,18 @@ import ActionsBar from 'pure-ui/components/actions-bar.vue';
 })
 export default class Detail extends Vue {
   src = '';
+  get isBack() {
+    return getCurrentPages().length > 1;
+  }
   onLoad(event: any) {
-    console.log(event);
     this.src = event.url;
   }
   back() {
-    uni.navigateBack({delta: 1});
+    if (this.isBack) {
+      uni.navigateBack({delta: 1});
+    } else {
+      uni.reLaunch({url: '/pages/index/index'});
+    }
   }
   action(event: any) {
     console.log(event);
@@ -81,7 +89,9 @@ export default class Detail extends Vue {
 .u-nav-slot {
   display: flex;
   align-items: center;
+  justify-content: center;
   border: 1+rpx solid #cccccc;
+  background-color: rgba(255, 255, 255, 0.6);
   border-radius: 50+rpx;
   padding: 10+rpx;
 }

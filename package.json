@@ -1,6 +1,6 @@
 {
   "name": "pure-wallpaper",
-  "version": "0.1.0",
+  "version": "0.0.4",
   "private": true,
   "scripts": {
     "serve": "npm run dev:h5",
@@ -42,7 +42,8 @@
     "test:ios": "cross-env UNI_PLATFORM=app-plus UNI_OS_NAME=ios jest -i",
     "test:mp-baidu": "cross-env UNI_PLATFORM=mp-baidu jest -i",
     "test:mp-weixin": "cross-env UNI_PLATFORM=mp-weixin jest -i",
-    "publish:mp-qq": "sh ci/mp-qq/publish.sh"
+    "publish:mp-qq": "sh ci/mp-qq/publish.sh",
+    "publish:mp-weixin": "node ci/mp-weixin/publish.js"
   },
   "dependencies": {
     "@city-hunter/pure-ui": "file:.yalc/@city-hunter/pure-ui",
@@ -101,6 +102,7 @@
     "jest": "^25.4.0",
     "mini-types": "*",
     "miniprogram-api-typings": "*",
+    "miniprogram-ci": "^1.6.10",
     "postcss-comment": "^2.0.0",
     "sass": "^1.45.1",
     "sass-loader": "^10.2.0",

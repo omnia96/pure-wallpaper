@@ -19,10 +19,11 @@
         </view>
       </template>
     </waterfall>
+    <u-loadmore :status="loadMoreStatus"></u-loadmore>
     <bottom-sheet title="设置" :show="settingSheetState" @close="settingSheetState = false">
       <cell-group>
         <cell title="授权管理" @click="openSetting"></cell>
-<!--        <cell title="更新日志" @click="toLogs"></cell>-->
+        <cell title="更新日志" @click="toLogs"></cell>
         <!-- #ifdef MP-WEIXIN -->
         <u-button :plain="false" open-type="contact" :customStyle="buttonNormalStyle">
           <cell title="在线联系"></cell>
@@ -51,7 +52,7 @@ import BottomSheet from 'pure-ui/components/bottom-sheet.vue';
 import UpdateManager from 'pure-ui/components/update-manager.vue';
 import Wallpapers from '@/views/wallpapers.vue';
 import RxUniCloud from '@/core/unit/rx-uni-cloud';
-import {finalize, map} from 'rxjs';
+import {map} from 'rxjs';
 @Component({
   components: {
     Wallpapers, Cell, SearchBar, CellGroup, Tabbar, Waterfall, BottomSheet, UpdateManager,
@@ -70,11 +71,11 @@ export default class Index extends Vue {
     color: 'inherit',
   };
   list = [];
+  pageHelper = {pageNum: 1, pages: 1};
+  loadMoreStatus: 'loading'|'nomore' = 'loading';
   created() {
     uni.getUpdateManager();
-    RxUniCloud.callFunction('images').pipe(
-        map((result) => this.list = result.result.data),
-    ).subscribe();
+    this.concatList();
   }
   toPrivacyPolicy() {
     uni.navigateTo({
@@ -84,7 +85,7 @@ export default class Index extends Vue {
   }
   toLogs() {
     uni.navigateTo({
-      url: '/pages/about/log/log',
+      url: '/pages/log/log',
     });
   }
   openSetting() {
@@ -92,15 +93,32 @@ export default class Index extends Vue {
   }
   onShareAppMessage() {}
   onPullDownRefresh() {
-    RxUniCloud.callFunction('images').pipe(
-        map((result) => this.list = result.result.data),
-        finalize(() => uni.stopPullDownRefresh()),
-    ).subscribe();
+    this.pageHelper.pageNum = 1;
+    this.list = [];
+    this.concatList();
   }
   toDetail(item: {name: string, url: string}) {
     uni.navigateTo({
       url: '/pages/detail/detail?url=' + item.url,
     });
+  }
+  onReachBottom() {
+    if (this.pageHelper.pageNum < this.pageHelper.pages) {
+      this.pageHelper.pageNum++;
+      this.concatList();
+    }
+  }
+  concatList() {
+    uni.showLoading({title: '加载中'});
+    RxUniCloud.callFunction('images', {version: '1.0.0', ...this.pageHelper})
+        .pipe(
+            map((result) => {
+              this.list = this.list.concat(result.result.data);
+              this.pageHelper.pages = result.result.pages;
+              uni.hideLoading();
+              uni.stopPullDownRefresh();
+            }),
+        ).subscribe();
   }
 }
 </script>
