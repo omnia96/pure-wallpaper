@@ -23,7 +23,7 @@
 	"condition": {
 		"current": -1,
 		"list": [
-			{"name": "详情", "path":  "pages/detail/detail", "query": "url=https://www.xxoozm.com/wp-content/uploads/2021/05/2021051810332617.jpg"},
+			{"name": "详情", "path":  "pages/detail/detail", "query": "id=61dbfb51f7f06e0001ebab53"},
 			{"name": "日志", "path":  "pages/log/log"}
 		]
 	}

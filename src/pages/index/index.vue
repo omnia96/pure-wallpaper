@@ -47,7 +47,7 @@ import SearchBar from 'pure-ui/components/search-bar.vue';
 import CellGroup from 'pure-ui/components/cell-group.vue';
 import Cell from 'pure-ui/components/cell.vue';
 import Tabbar from 'pure-ui/components/tabbar.vue';
-import Waterfall from 'pure-ui/components/waterfall.vue';
+import Waterfall from '@city-hunter/pure-ui/components/waterfall.vue';
 import BottomSheet from 'pure-ui/components/bottom-sheet.vue';
 import UpdateManager from 'pure-ui/components/update-manager.vue';
 import Wallpapers from '@/views/wallpapers.vue';
@@ -70,7 +70,7 @@ export default class Index extends Vue {
     fontSize: '100%',
     color: 'inherit',
   };
-  list = [];
+  list: any[] = [];
   pageHelper = {pageNum: 1, pages: 1};
   loadMoreStatus: 'loading'|'nomore' = 'loading';
   created() {
@@ -97,10 +97,8 @@ export default class Index extends Vue {
     this.list = [];
     this.concatList();
   }
-  toDetail(item: {name: string, url: string}) {
-    uni.navigateTo({
-      url: '/pages/detail/detail?url=' + item.url,
-    });
+  toDetail(item: {name: string, url: string, _id: string}) {
+    uni.navigateTo({url: `/pages/detail/detail?id=${item._id}`});
   }
   onReachBottom() {
     if (this.pageHelper.pageNum < this.pageHelper.pages) {

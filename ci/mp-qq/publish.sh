@@ -15,7 +15,7 @@ fi
 echo '运行 docker 镜像'
 docker run \
     --name pure-wallpaper-qqminiapp \
-    -e PLUGIN_VERSION=1.0.0 \
+    -e PLUGIN_VERSION=0.0.5 \
     -e PLUGIN_DESC=版本描述 \
     -e PLUGIN_APPTOKEN=6c1aa05373f21497032bd91878f9a1db \
     -e PLUGIN_EXPERIENCE=true \

@@ -20,6 +20,18 @@
 			"bsonType": "string",
 			"title": "图片地址",
 			"description": "图片地址"
+		},
+		"downloadCount": {
+			"bsonType": "int",
+			"title": "下载总数",
+			"description": "下载总数",
+			"defaultValue": 0
+		},
+		"shareCount": {
+			"bsonType": "int",
+			"title": "分享总数",
+			"description": "分享总数",
+			"defaultValue": 0
 		}
 	}
 }

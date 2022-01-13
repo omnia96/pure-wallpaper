@@ -75,7 +75,7 @@ export default class extends Vue {
               switchMap((result) => {
                 const createImages$ = result.map((item) => RxUniCloud.callFunction(
                     'createImage',
-                    {name: '', url: item.fileID}),
+                    {name: '', url: item.fileID, downloadCount: 0}),
                 );
                 return forkJoin(createImages$);
               }),

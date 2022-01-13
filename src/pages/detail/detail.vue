@@ -8,28 +8,66 @@
       </view>
     </u-navbar>
     <view class="detail flex-c">
-      <u-image :src="src" width="100vw" height="100vh" mode="aspectFill"></u-image>
+      <u-image :src="wallpaper.url" width="100vw" height="100vh" mode="aspectFill"></u-image>
       <view class="detail-mask"></view>
       <view class="detail-actions w-100">
-        <actions-bar :actions="[{text: '下载', icon: 'download'}]" @action="action"></actions-bar>
+        <actions-bar :actions="actions" @action="action"></actions-bar>
       </view>
     </view>
+    <bottom-sheet :show="infoBottomSheetState"
+                  title="壁纸信息"
+                  @close="infoBottomSheetState = false">
+      <u-grid :border="true">
+        <template v-for="(item, index) in infos">
+          <u-grid-item :key="index">
+            <u-icon size="30" :name="item.icon"></u-icon>
+            <text>{{item.label}}</text>
+          </u-grid-item>
+        </template>
+      </u-grid>
+    </bottom-sheet>
   </view>
 </template>
 <script lang="ts">
 import {Vue, Component} from 'vue-property-decorator';
-import ActionsBar from 'pure-ui/components/actions-bar.vue';
+import ActionsBar from '@city-hunter/pure-ui/components/actions-bar.vue';
+import RxUni from '@city-hunter/pure-ui/unit/rx-uni';
+import {finalize, switchMap} from 'rxjs';
+import BottomSheet from '@city-hunter/pure-ui/components/bottom-sheet.vue';
+import RxUniCloud from '@/core/unit/rx-uni-cloud';
+import CellGroup from '@city-hunter/pure-ui/components/cell-group.vue';
+import Cell from '@city-hunter/pure-ui/components/cell.vue';
 
 @Component({
-  components: {ActionsBar},
-})
+  components: {ActionsBar, BottomSheet, CellGroup, Cell}},
+)
 export default class Detail extends Vue {
   src = '';
+  actions = [
+    {text: '分享', icon: 'share', openType: 'share'},
+    {text: '下载', icon: 'download'},
+    {text: '信息', icon: 'info-circle'},
+  ];
+  infoBottomSheetState = false;
+  wallpaper: any = {};
+  get infos() {
+    return [
+      {icon: 'share', label: `分享 ${this.wallpaper.shareCount||0} 次`},
+      {icon: 'download', label: `下载 ${this.wallpaper.downloadCount||0} 次`},
+      {icon: 'heart', label: '点赞 0 次'},
+    ];
+  }
   get isBack() {
     return getCurrentPages().length > 1;
   }
   onLoad(event: any) {
-    this.src = event.url;
+    this.wallpaper = {_id: event.id};
+    RxUniCloud.callFunction('wallpaper', {version: '0.0.5', id: this.wallpaper._id}).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.wallpaper = response.result.data;
+      },
+    });
   }
   back() {
     if (this.isBack) {
@@ -38,32 +76,35 @@ export default class Detail extends Vue {
       uni.reLaunch({url: '/pages/index/index'});
     }
   }
-  action(event: any) {
-    console.log(event);
-    uni.showLoading({
-      title: '下载中...',
-    });
-    uni.downloadFile({
-      url: this.src,
-      success: (result) => {
-        console.log(result);
-        // uni.saveFile();
-        uni.saveImageToPhotosAlbum({
-          filePath: result.tempFilePath,
-          success: (res) => {
-            console.log(res);
-            uni.showToast({icon: 'none', title: '已保存到相册'});
+  action(index: number) {
+    switch (index) {
+      case 0:
+        RxUniCloud.callFunction('share', {id: this.wallpaper._id}).subscribe({
+          next: (response) => {
+            this.wallpaper = response.result.data;
           },
-          fail: (res) => uni.showToast({icon: 'none', title: res, duration: 1000}),
         });
-      },
-      fail: (result) => {
-        uni.showToast({icon: 'none', title: result.errMsg, duration: 1000});
-      },
-      complete: () => {
-        uni.hideLoading();
-      },
-    });
+        break;
+      case 1:
+        uni.showLoading({
+          title: '下载中...',
+        });
+        RxUni.downloadFile({url: this.wallpaper.url}).pipe(
+            switchMap((result) => RxUni.saveImageToPhotosAlbum({filePath: result.tempFilePath})),
+            switchMap(() => RxUniCloud.callFunction('download', {id: this.wallpaper._id})),
+            finalize(() => uni.hideLoading()),
+        ).subscribe({
+          next: (response) => {
+            uni.showToast({icon: 'none', title: '已保存到相册'});
+            this.wallpaper = response.result.data;
+          },
+          error: (result) => uni.showToast({icon: 'none', title: result.errMsg, duration: 1000}),
+        });
+        break;
+      case 2:
+        this.infoBottomSheetState = true;
+        break;
+    }
   }
 }
 </script>
