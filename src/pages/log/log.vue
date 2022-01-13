@@ -18,6 +18,15 @@ import UpdateLog from '@city-hunter/pure-ui/components/update-log.vue';
 export default class Log extends Vue {
   logs = [
     {
+      version: '0.0.6',
+      date: '2022-01-13',
+      content: [
+        '- 新增分享功能',
+        '- 新增壁纸信息',
+        '- 修复ios系统下下载按钮错位的bug',
+      ],
+    },
+    {
       version: '0.0.5',
       date: '2021-12-28',
       content: [
