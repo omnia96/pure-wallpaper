@@ -25,11 +25,11 @@
 </template>
 <script lang="ts">
 import {Vue, Component} from 'vue-property-decorator';
-import Waterfall from 'pure-ui/components/waterfall.vue';
-import SearchBar from 'pure-ui/components/search-bar.vue';
-import ActionsBar from 'pure-ui/components/actions-bar.vue';
+import Waterfall from '@city-hunter/pure-ui/components/waterfall.vue';
+import SearchBar from '@city-hunter/pure-ui/components/search-bar.vue';
+import ActionsBar from '@city-hunter/pure-ui/components/actions-bar.vue';
 import RxUniCloud from '@/core/unit/rx-uni-cloud';
-import {finalize, forkJoin, from, map, of, switchMap} from 'rxjs';
+import {finalize, forkJoin, map, switchMap} from 'rxjs';
 import RxUni from 'pure-ui/unit/rx-uni';
 
 @Component({

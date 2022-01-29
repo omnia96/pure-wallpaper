@@ -1,6 +1,6 @@
 {
   "name": "pure-wallpaper",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "private": true,
   "scripts": {
     "serve": "npm run dev:h5",
@@ -64,6 +64,7 @@
     "@dcloudio/uni-quickapp-webview": "^2.0.1-32920211122003",
     "@dcloudio/uni-stat": "^2.0.1-32920211122003",
     "@vue/shared": "^3.0.0",
+    "@zebra-ui/swiper": "^1.0.7",
     "core-js": "^3.6.5",
     "flyio": "^0.6.2",
     "pure-ui": "file:.yalc/pure-ui",

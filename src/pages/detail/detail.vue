@@ -37,7 +37,7 @@ import BottomSheet from '@city-hunter/pure-ui/components/bottom-sheet.vue';
 import RxUniCloud from '@/core/unit/rx-uni-cloud';
 import CellGroup from '@city-hunter/pure-ui/components/cell-group.vue';
 import Cell from '@city-hunter/pure-ui/components/cell.vue';
-import {VERSION} from '@/core/config/app.config';
+import AppConfig from '@/core/config/app.config';
 
 @Component({
   components: {ActionsBar, BottomSheet, CellGroup, Cell}},
@@ -63,7 +63,7 @@ export default class Detail extends Vue {
   }
   onLoad(event: any) {
     this.wallpaper = {_id: event.id};
-    RxUniCloud.callFunction('wallpaper', {version: VERSION, id: this.wallpaper._id}).subscribe({
+    RxUniCloud.callFunction('wallpaper', {version: AppConfig.VERSION, id: this.wallpaper._id}).subscribe({
       next: (response) => {
         console.log(response);
         this.wallpaper = response.result.data;

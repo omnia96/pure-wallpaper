@@ -1,5 +1,5 @@
 {
-    "name" : "pure-wallpaper",
+    "name" : "Pure简壁纸",
     "appid" : "__UNI__C9E0A41",
     "description" : "",
     "versionName" : "1.0.0",
@@ -58,7 +58,7 @@
     },
     "mp-qq" : {
         "usingComponents" : true,
-        "appid": "1112163846"
+        "appid" : "1112163846"
     },
     "h5" : {
         "router" : {

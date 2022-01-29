@@ -10,6 +10,7 @@
 				"enablePullDownRefresh": true
 			}
 		},
+		{"path": "pages/for-you/for-you", "style": {"navigationBarTitleText": "为你推荐", "enablePullDownRefresh": true}},
 		{"path": "pages/detail/detail", "style": {"navigationStyle":"custom"}},
 		{"path": "pages/privacy-policy/privacy-policy", "style":  {"navigationBarTitleText": "隐私权政策"}},
 		{"path": "pages/log/log"}
@@ -20,11 +21,21 @@
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	},
+	"tabBar":{
+		"color": "#ffffff00",
+		"selectedColor": "#ffffff00",
+		"backgroundColor": "#ffffff00",
+		"list": [
+			{"pagePath": "pages/index/index","text":""},
+			{"pagePath": "pages/for-you/for-you","text":""}
+		]
+	},
 	"condition": {
 		"current": -1,
 		"list": [
 			{"name": "详情", "path":  "pages/detail/detail", "query": "id=61dbfb51f7f06e0001ebab53"},
-			{"name": "日志", "path":  "pages/log/log"}
+			{"name": "日志", "path":  "pages/log/log"},
+			{"name": "为你推荐", "path":  "pages/for-you/for-you"}
 		]
 	}
 }

@@ -11,6 +11,7 @@ exports.main = async (event, context) => {
     switch (version) {
       case '0.0.5':
       case '0.0.6':
+      case '0.0.7':
       case '1.0.0':
         const pageNum = event.pageNum||1;
         const pageSize = event.pageSize||10;

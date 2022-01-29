@@ -44,23 +44,24 @@
     <!-- #ifdef H5 -->
     <wallpapers></wallpapers>
     <!-- #endif -->
-<!--    <tabbar></tabbar>-->
+    <tabbar :list="tabBarList" :value="0"></tabbar>
   </view>
 </template>
 
 <script lang="ts">
 import {Vue, Component} from 'vue-property-decorator';
-import SearchBar from 'pure-ui/components/search-bar.vue';
+import SearchBar from '@city-hunter/pure-ui/components/search-bar.vue';
 import CellGroup from '@city-hunter/pure-ui/components/cell-group.vue';
 import Cell from '@city-hunter/pure-ui/components/cell.vue';
-import Tabbar from 'pure-ui/components/tabbar.vue';
+import Tabbar from '@city-hunter/pure-ui/components/tabbar.vue';
 import Waterfall from '@city-hunter/pure-ui/components/waterfall.vue';
 import BottomSheet from '@city-hunter/pure-ui/components/bottom-sheet.vue';
 import UpdateManager from '@city-hunter/pure-ui/components/update-manager.vue';
 import Wallpapers from '@/views/wallpapers.vue';
 import RxUniCloud from '@/core/unit/rx-uni-cloud';
+
 import {map} from 'rxjs';
-import {VERSION} from '@/core/config/app.config';
+import AppConfig from '@/core/config/app.config';
 @Component({
   components: {
     Wallpapers, Cell, SearchBar, CellGroup, Tabbar, Waterfall, BottomSheet, UpdateManager,
@@ -81,6 +82,7 @@ export default class Index extends Vue {
   list: any[] = [];
   pageHelper = {pageNum: 1, pages: 1};
   loadMoreStatus: 'loading'|'nomore' = 'loading';
+  tabBarList = AppConfig.TAB_BAR;
   created() {
     uni.getUpdateManager();
     this.concatList();
@@ -116,7 +118,7 @@ export default class Index extends Vue {
   }
   concatList() {
     uni.showLoading({title: '加载中'});
-    RxUniCloud.callFunction('images', {version: VERSION, ...this.pageHelper})
+    RxUniCloud.callFunction('images', {version: AppConfig.VERSION, ...this.pageHelper})
         .pipe(
             map((result) => {
               this.list = this.list.concat(result.result.data);

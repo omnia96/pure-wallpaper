@@ -18,6 +18,11 @@ import UpdateLog from '@city-hunter/pure-ui/components/update-log.vue';
 export default class Log extends Vue {
   logs = [
     {
+      version: '0.0.7',
+      date: '2022-01-30',
+      content: ['- 新增为你推荐模块'],
+    },
+    {
       version: '0.0.6',
       date: '2022-01-13',
       content: [
