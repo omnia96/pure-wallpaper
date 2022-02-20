@@ -4,7 +4,10 @@ exports.main = async (event, context) => {
   const {version, id} = event;
   const response = {data: {}};
   const db = uniCloud.database();
-  const collection = db.collection('images');
+  const auditModeState = (
+    await db.collection('app-config').where({name: 'audit-mode-state'}).get()
+  ).data[0].value;
+  const collection = db.collection(auditModeState === 'true' ? 'images-audit' : 'images');
   switch (version) {
     default:
       const record = await collection.doc(id).get();

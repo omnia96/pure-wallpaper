@@ -1,12 +1,15 @@
 'use strict';
 exports.main = async (event, context) => {
   // event为客户端上传的参数
-  console.log(event);
+  // console.log(event);
   const db = uniCloud.database();
-  const collection = db.collection('images');
+  const auditModeState = (
+    await db.collection('app-config').where({name: 'audit-mode-state'}).get()
+  ).data[0].value;
+  const collection = db.collection(auditModeState === 'true' ? 'images-audit' : 'images');
   const response = {data: []};
   const {version} = event;
-  console.log(version);
+  // console.log(version);
   if (version) {
     const pageNum = event.pageNum||1;
     const pageSize = event.pageSize||10;
@@ -19,11 +22,11 @@ exports.main = async (event, context) => {
       case '0.0.7':
       case '1.0.0':
         record = await collection.orderBy('_id', 'desc').skip(startRow).limit(pageSize).get();
-        console.log('pageNum', pageNum);
-        console.log('pageSize', pageSize);
-        console.log('startRow', startRow);
-        console.log(recordCount);
-        console.log(record);
+        // console.log('pageNum', pageNum);
+        // console.log('pageSize', pageSize);
+        // console.log('startRow', startRow);
+        // console.log(recordCount);
+        // console.log(record);
         response.pages = (recordCount.total / pageSize).toFixed();
         response.data.push(...record.data);
         break;

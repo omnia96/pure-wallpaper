@@ -24,7 +24,7 @@
     <bottom-sheet :show="settingSheetState" title="设置" @close="settingSheetState = false">
       <cell-group :is-last="true">
         <cell title="审核模式" :is-last="true">
-          <u-switch v-model="auditModeState"></u-switch>
+          <u-switch v-model="auditModeState" @change="setAuditModeState"></u-switch>
         </cell>
       </cell-group>
     </bottom-sheet>
@@ -68,10 +68,26 @@ export default class extends Vue {
     return column;
   }
   created() {
+    const success = (result: any) => {
+      const auditModeState = result.result.find(
+          (item: any) => item.name === 'audit-mode-state',
+      ).value;
+      switch (auditModeState) {
+        case 'true':
+          this.auditModeState = true;
+          break;
+        case 'false':
+          this.auditModeState = false;
+          break;
+      }
+    };
+    uniCloud.callFunction({name: 'app-configs', success});
+  }
+  setList() {
     uniCloud.callFunction({
       name: 'images',
       success: (result) => {
-        console.log(result.result);
+        // console.log(result.result);
         this.list = result.result.data;
       },
     });
@@ -118,6 +134,14 @@ export default class extends Vue {
         }
       },
     });
+  }
+  setAuditModeState() {
+    RxUniCloud.callFunction(
+        'app-configs',
+        {type: 'put', record: {name: 'audit-mode-state', value: String(this.auditModeState)}},
+    ).pipe(
+        finalize(() => this.setList()),
+    ).subscribe();
   }
 }
 </script>
