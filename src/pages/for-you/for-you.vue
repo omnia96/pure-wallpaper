@@ -67,7 +67,6 @@ export default class ForYou extends Vue {
 
 <style lang="scss">
 .page {
-  touch-action: none;
 }
 .content {
     display: flex;

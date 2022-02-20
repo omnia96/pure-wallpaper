@@ -8,7 +8,7 @@ exports.main = async (event, context) => {
   const {version} = event;
   switch (version) {
     default:
-      const record = await collection.orderBy('downloadCount', 'asc').limit(100).get();
+      const record = await collection.orderBy('downloadCount', 'asc').limit(400).get();
       // const record = await collection.limit(50).get();
       response.data.push(...record.data.sort(() => Math.random() - 0.5).slice(0, 20));
       break;
