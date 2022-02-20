@@ -5,7 +5,7 @@
               previousMargin="30"
               nextMargin="30"
               circular :autoplay="false"
-              height="calc(100vh - 144px)"
+              :height="swiperHeight"
               bgColor="#ffffff"
               radius="10"
               @click="toDetail"
@@ -33,6 +33,16 @@ export default class ForYou extends Vue {
   tabBarList = AppConfig.TAB_BAR;
   wallpapers = [];
   current = 0;
+  get swiperHeight() {
+    let height = '';
+    // #ifndef H5
+    height = 'calc(100vh - 100px)';
+    // #endif
+    // #ifdef H5
+    height = 'calc(100vh - 144px)';
+    // #endif
+    return height;
+  }
   onLoad() {
     this.setWallpapers();
   }

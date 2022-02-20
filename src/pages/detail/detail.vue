@@ -110,6 +110,9 @@ export default class Detail extends Vue {
 }
 </script>
 <style lang="scss">
+.page {
+  touch-action: none;
+}
 .detail {
   width: 100vw;
   height: 100vh;
