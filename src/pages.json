@@ -3,14 +3,8 @@
 		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
 	},
 	"pages": [
-		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "Pure·简壁纸",
-				"enablePullDownRefresh": true
-			}
-		},
 		{"path": "pages/for-you/for-you", "style": {"navigationBarTitleText": "为你推荐", "enablePullDownRefresh": true}},
+		{"path": "pages/index/index", "style": {"navigationBarTitleText": "Pure·简壁纸", "enablePullDownRefresh": true}},
 		{"path": "pages/detail/detail", "style": {"navigationStyle":"custom"}},
 		{"path": "pages/privacy-policy/privacy-policy", "style":  {"navigationBarTitleText": "隐私权政策"}},
 		{"path": "pages/log/log"}
@@ -26,8 +20,8 @@
 		"selectedColor": "#ffffff00",
 		"backgroundColor": "#ffffff00",
 		"list": [
-			{"pagePath": "pages/index/index","text":""},
-			{"pagePath": "pages/for-you/for-you","text":""}
+			{"pagePath": "pages/for-you/for-you","text":""},
+			{"pagePath": "pages/index/index","text":""}
 		]
 	},
 	"condition": {

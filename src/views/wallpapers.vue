@@ -5,6 +5,9 @@
       <view class="actions">
         <u-button icon="plus" text="上传" @click="upload"></u-button>
       </view>
+      <view class="actions">
+        <u-button icon="setting" @click="settingSheetState = true"></u-button>
+      </view>
     </view>
     <waterfall class="w-100" margin="0" :column="column" :value="list">
       <template v-slot:default="{ value }">
@@ -14,13 +17,17 @@
             <actions-bar :actions="[{text: '', icon: 'trash'}]"
                          @action="deleteImage(value)"
             ></actions-bar>
-<!--            <view class="wallpaper-action" @click="deleteImage(value)">-->
-<!--              <u-icon name="trash" size="40rpx" color="white"></u-icon>-->
-<!--            </view>-->
           </view>
         </view>
       </template>
     </waterfall>
+    <bottom-sheet :show="settingSheetState" title="设置" @close="settingSheetState = false">
+      <cell-group :is-last="true">
+        <cell title="审核模式" :is-last="true">
+          <u-switch v-model="auditModeState"></u-switch>
+        </cell>
+      </cell-group>
+    </bottom-sheet>
   </view>
 </template>
 <script lang="ts">
@@ -31,16 +38,24 @@ import ActionsBar from '@city-hunter/pure-ui/components/actions-bar.vue';
 import RxUniCloud from '@/core/unit/rx-uni-cloud';
 import {finalize, forkJoin, map, switchMap} from 'rxjs';
 import RxUni from 'pure-ui/unit/rx-uni';
+import BottomSheet from '@city-hunter/pure-ui/components/bottom-sheet.vue';
+import CellGroup from '@city-hunter/pure-ui/components/cell-group.vue';
+import Cell from '@city-hunter/pure-ui/components/cell.vue';
 
 @Component({
   components: {
     Waterfall,
     SearchBar,
     ActionsBar,
+    BottomSheet,
+    CellGroup,
+    Cell,
   },
 })
 export default class extends Vue {
   list: any[] = [];
+  settingSheetState = false;
+  auditModeState = false;
   get column() {
     let column = 8;
     uni.getSystemInfo({
@@ -110,7 +125,10 @@ export default class extends Vue {
 .app-header {
   height: 144+rpx;
   border-bottom: 1px solid #e8e8e8;
-  padding-right: 40+rpx;
+  padding-right: 10px;
+  .actions {
+    margin: 0 10px;
+  }
 }
 .wallpaper {
   position: relative;

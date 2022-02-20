@@ -9,7 +9,8 @@ exports.main = async (event, context) => {
   switch (version) {
     default:
       const record = await collection.orderBy('downloadCount', 'asc').limit(100).get();
-      response.data.push(...record.data.sort(() => Math.random() - 0.5).slice(0, 10));
+      // const record = await collection.limit(50).get();
+      response.data.push(...record.data.sort(() => Math.random() - 0.5).slice(0, 20));
       break;
   }
   // 返回数据给客户端

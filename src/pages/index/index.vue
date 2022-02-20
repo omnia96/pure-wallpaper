@@ -44,7 +44,7 @@
     <!-- #ifdef H5 -->
     <wallpapers></wallpapers>
     <!-- #endif -->
-    <tabbar :list="tabBarList" :value="0"></tabbar>
+    <tabbar :list="tabBarList" :value="1"></tabbar>
   </view>
 </template>
 
@@ -59,12 +59,14 @@ import BottomSheet from '@city-hunter/pure-ui/components/bottom-sheet.vue';
 import UpdateManager from '@city-hunter/pure-ui/components/update-manager.vue';
 import Wallpapers from '@/views/wallpapers.vue';
 import RxUniCloud from '@/core/unit/rx-uni-cloud';
+import NavigationDrawer from '@city-hunter/pure-ui/components/navigation-drawer.vue';
 
 import {map} from 'rxjs';
 import AppConfig from '@/core/config/app.config';
 @Component({
   components: {
-    Wallpapers, Cell, SearchBar, CellGroup, Tabbar, Waterfall, BottomSheet, UpdateManager,
+    Wallpapers,
+    Cell, SearchBar, CellGroup, Tabbar, Waterfall, BottomSheet, UpdateManager, NavigationDrawer,
   },
 })
 export default class Index extends Vue {
