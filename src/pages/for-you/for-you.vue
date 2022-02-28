@@ -45,6 +45,7 @@ export default class ForYou extends Vue {
   }
   onLoad() {
     this.setWallpapers();
+    this.createInterstitialAd();
   }
   public onPullDownRefresh() {
     this.setWallpapers();
@@ -61,6 +62,25 @@ export default class ForYou extends Vue {
         }),
         finalize(() => uni.stopPullDownRefresh()),
     ).subscribe();
+  }
+  createInterstitialAd() {
+    // #ifdef MP-WEIXIN
+    let interstitialAd = null;
+    if (wx.createInterstitialAd) {
+      interstitialAd = wx.createInterstitialAd({
+        adUnitId: 'adunit-5cb9852387b53129',
+      });
+      const random = Math.random() > 0.5;
+      console.log(random);
+      if (interstitialAd && random) {
+        interstitialAd.show().catch((err: any) => {
+          console.log(err);
+        });
+      }
+    } else {
+      console.log('当前微信版本过低，暂不支持插屏广告');
+    }
+    // #endif
   }
 }
 </script>

@@ -51,7 +51,6 @@ export default class Detail extends Vue {
   ];
   infoBottomSheetState = false;
   wallpaper: any = {};
-  interstitialAd: any = null;
   get infos() {
     return [
       {icon: 'share', label: `分享 ${this.wallpaper.shareCount||0} 次`},
@@ -73,8 +72,8 @@ export default class Detail extends Vue {
         this.wallpaper = response.result.data;
       },
     });
-    this.createInterstitialAd();
-    this.showInterstitialAd();
+  }
+  onShow() {
   }
   back() {
     if (this.isBack) {
@@ -112,31 +111,6 @@ export default class Detail extends Vue {
         this.infoBottomSheetState = true;
         break;
     }
-  }
-  createInterstitialAd() {
-    // #ifdef MP-WEIXIN
-    if (wx.createInterstitialAd) {
-      this.interstitialAd = wx.createInterstitialAd({
-        adUnitId: 'adunit-5cb9852387b53129',
-      });
-      this.interstitialAd.onLoad(() => {});
-      this.interstitialAd.onError((err: any) => {});
-      this.interstitialAd.onClose(() => {});
-    }
-    // #endif
-  }
-  showInterstitialAd() {
-    // #ifdef MP-WEIXIN
-    // 20%的概率 show 等于 true
-    const random = Math.random() > 0.8;
-    // 打印随机数
-    console.log(random);
-    if (random) {
-      if (this.interstitialAd) {
-        this.interstitialAd.show().catch((err: any) => {});
-      }
-    }
-    // #endif
   }
 }
 </script>
