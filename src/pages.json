@@ -27,9 +27,11 @@
 	"condition": {
 		"current": -1,
 		"list": [
+			{"name": "图库", "path":  "pages/index/index"},
 			{"name": "详情", "path":  "pages/detail/detail", "query": "id=61dbfb51f7f06e0001ebab53"},
 			{"name": "日志", "path":  "pages/log/log"},
-			{"name": "为你推荐", "path":  "pages/for-you/for-you"}
+			{"name": "为你推荐", "path":  "pages/for-you/for-you"},
+			{"name": "隐私权政策", "path":  "pages/privacy-policy/privacy-policy"}
 		]
 	}
 }

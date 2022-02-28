@@ -20,6 +20,7 @@ exports.main = async (event, context) => {
       case '0.0.5':
       case '0.0.6':
       case '0.0.7':
+      case '0.0.8':
       case '1.0.0':
         record = await collection.orderBy('_id', 'desc').skip(startRow).limit(pageSize).get();
         // console.log('pageNum', pageNum);
@@ -30,7 +31,7 @@ exports.main = async (event, context) => {
         response.pages = (recordCount.total / pageSize).toFixed();
         response.data.push(...record.data);
         break;
-      case '0.0.8':
+      case '0.0.9':
         record = await collection.orderBy('_id', 'desc').skip(startRow).limit(pageSize).get();
         response.pages = 2;
         response.data.push(...record.data);

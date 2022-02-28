@@ -51,6 +51,7 @@ export default class Detail extends Vue {
   ];
   infoBottomSheetState = false;
   wallpaper: any = {};
+  interstitialAd: any = null;
   get infos() {
     return [
       {icon: 'share', label: `分享 ${this.wallpaper.shareCount||0} 次`},
@@ -63,12 +64,17 @@ export default class Detail extends Vue {
   }
   onLoad(event: any) {
     this.wallpaper = {_id: event.id};
-    RxUniCloud.callFunction('wallpaper', {version: AppConfig.VERSION, id: this.wallpaper._id}).subscribe({
+    RxUniCloud.callFunction(
+        'wallpaper',
+        {version: AppConfig.VERSION, id: this.wallpaper._id},
+    ).subscribe({
       next: (response) => {
         console.log(response);
         this.wallpaper = response.result.data;
       },
     });
+    this.createInterstitialAd();
+    this.showInterstitialAd();
   }
   back() {
     if (this.isBack) {
@@ -96,7 +102,7 @@ export default class Detail extends Vue {
             finalize(() => uni.hideLoading()),
         ).subscribe({
           next: (response) => {
-            uni.showToast({icon: 'none', title: '已保存到相册'});
+            uni.showToast({icon: 'success', title: '已保存到相册', duration: 2000});
             this.wallpaper = response.result.data;
           },
           error: (result) => uni.showToast({icon: 'none', title: result.errMsg, duration: 1000}),
@@ -106,6 +112,31 @@ export default class Detail extends Vue {
         this.infoBottomSheetState = true;
         break;
     }
+  }
+  createInterstitialAd() {
+    // #ifdef MP-WEIXIN
+    if (wx.createInterstitialAd) {
+      this.interstitialAd = wx.createInterstitialAd({
+        adUnitId: 'adunit-5cb9852387b53129',
+      });
+      this.interstitialAd.onLoad(() => {});
+      this.interstitialAd.onError((err: any) => {});
+      this.interstitialAd.onClose(() => {});
+    }
+    // #endif
+  }
+  showInterstitialAd() {
+    // #ifdef MP-WEIXIN
+    // 20%的概率 show 等于 true
+    const random = Math.random() > 0.8;
+    // 打印随机数
+    console.log(random);
+    if (random) {
+      if (this.interstitialAd) {
+        this.interstitialAd.show().catch((err: any) => {});
+      }
+    }
+    // #endif
   }
 }
 </script>

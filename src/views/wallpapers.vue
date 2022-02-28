@@ -82,6 +82,7 @@ export default class extends Vue {
       }
     };
     uniCloud.callFunction({name: 'app-configs', success});
+    this.setList();
   }
   setList() {
     uniCloud.callFunction({
