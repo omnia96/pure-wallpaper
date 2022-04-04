@@ -93,32 +93,90 @@ export default class extends Vue {
       },
     });
   }
-  upload() {
-    uni.chooseImage({
-      count: 20,
-      success: (result) => {
-        if (result.tempFilePaths.length > 20) {
-          uni.showToast({title: '一次最多上传20张图片', icon: 'none'});
-        } else {
-          uni.showLoading({title: '上传中'});
-          const uploadFiles$ = (result.tempFilePaths as string[])
-              .map((item) => RxUniCloud.uploadFile('images/a.jpg', item.toString()));
-          forkJoin(uploadFiles$).pipe(
-              switchMap((result) => {
-                const createImages$ = result.map((item) => RxUniCloud.callFunction(
-                    'createImage',
-                    {name: '', url: item.fileID, downloadCount: 0}),
-                );
-                return forkJoin(createImages$);
-              }),
-              finalize(() => uni.hideLoading()),
-              switchMap(() => RxUniCloud.callFunction('images')),
-              map((result) => this.list = result.result.data),
-              switchMap(() => RxUni.showToast('上传成功')),
-          ).subscribe();
-        }
-      },
+  // upload() {
+  //   uni.chooseImage({
+  //     count: 20,
+  //     success: (result) => {
+  //       if (result.tempFilePaths.length > 20) {
+  //         uni.showToast({title: '一次最多上传20张图片', icon: 'none'});
+  //       } else {
+  //         console.log(result.tempFilePaths);
+  //         const blobToDataURI = (blob: any, callback: any) => {
+  //           const reader = new FileReader();
+  //           reader.onload = (e: any) => {
+  //             callback(e.target.result);
+  //           };
+  //           reader.readAsDataURL(blob);
+  //         };
+  //         console.log(blobToDataURI())
+  //         // uni.showLoading({title: '上传中'});
+  //         // const uploadFiles$ = (result.tempFilePaths as string[])
+  //         //     .map((item) => RxUniCloud.uploadFile('images/a.jpg', item.toString()));
+  //         // forkJoin(uploadFiles$).pipe(
+  //         //     switchMap((result) => {
+  //         //       const createImages$ = result.map((item) => RxUniCloud.callFunction(
+  //         //           'createImage',
+  //         //           {name: '', url: item.fileID, downloadCount: 0}),
+  //         //       );
+  //         //       return forkJoin(createImages$);
+  //         //     }),
+  //         //     finalize(() => uni.hideLoading()),
+  //         //     switchMap(() => RxUniCloud.callFunction('images')),
+  //         //     map((result) => this.list = result.result.data),
+  //         //     switchMap(() => RxUni.showToast('上传成功')),
+  //         // ).subscribe();
+  //       }
+  //     },
+  //   });
+  // }
+  async upload() {
+    const [, {tempFiles}]: any = (await uni.chooseImage({count: 1}));
+    const toBase64 = (file: any) => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function() {
+          resolve(this.result);
+        };
+      });
+    };
+    const base64Image: any = await toBase64(tempFiles[0]);
+    const [imageHead, imageValue] = base64Image.split(',');
+    uni.showLoading({title: '增强图片画质中'});
+    const accessToken = '24.f056c750175a68e1f5a6cea4d547f61b.2592000.1651079012.282335-25862152';
+    const host = 'https://aip.baidubce.com';
+    const api = '/rest/2.0/image-process/v1/image_definition_enhance';
+    const param = `?access_token=${accessToken}`;
+    const [, {data: {image}}]: any = await uni.request({
+      url: host + api + param,
+      method: 'POST',
+      data: {rectangle: [], image: imageValue},
+      header: {'Content-Type': 'application/x-www-form-urlencoded'},
     });
+    uni.hideLoading();
+    uni.showLoading({title: '上传中'});
+    const dataURItoBlob = (dataURI: any) => {
+      const byteString = atob(dataURI.split(',')[1]);
+      const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+      const ab = new ArrayBuffer(byteString.length);
+      const ia = new Uint8Array(ab);
+      for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+      }
+      return new Blob([ab], {type: mimeString});
+    };
+    const blob = dataURItoBlob(`${imageHead},${image}`);
+    const blobUrl = window.URL.createObjectURL(blob);
+    RxUniCloud.uploadFile('images/a.jpg', blobUrl).pipe(
+        switchMap(({fileID}) => RxUniCloud.callFunction(
+            'createImage',
+            {name: '', url: fileID, downloadCount: 0},
+        )),
+        finalize(() => uni.hideLoading()),
+        switchMap(() => RxUniCloud.callFunction('images')),
+        map((result) => this.list = result.result.data),
+        switchMap(() => RxUni.showToast('上传成功')),
+    ).subscribe();
   }
   deleteImage(image: any) {
     uni.showModal({
